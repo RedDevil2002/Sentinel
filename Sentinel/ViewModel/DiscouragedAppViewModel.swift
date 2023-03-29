@@ -9,7 +9,7 @@ import FamilyControls
 import SwiftUI
 import Combine
 
-class AppViewModel: ObservableObject {
+class DiscouragedAppViewModel: ObservableObject {
     var sentinel: Sentinel
     @Published var discouragedApps: FamilyActivitySelection
     
@@ -34,13 +34,15 @@ class AppViewModel: ObservableObject {
             .receive(on: RunLoop.main)
             .removeDuplicates()
             .sink { _ in
-                self.shield()
+                self.discourage()
             }
             .store(in: &cancellables)
+        
+        
     }
     
-    func shield() {
-        sentinel.setShieldRestrictions(discouragedApps)
+    func discourage() {
+        sentinel.discourage(discouragedApps)
     }
     
 }

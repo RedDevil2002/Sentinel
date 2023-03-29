@@ -9,22 +9,21 @@ import SwiftUI
 import FamilyControls
 import ManagedSettings
 
-struct AppBLockListView: View {
+struct EncouragedAppsView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var sentinel: Sentinel
-    @State private var showAddWebsiteView = false
     
-    @ObservedObject var viewModel = AppViewModel()
+    @ObservedObject var viewModel = EncouragedAppViewModel()
     
     var body: some View {
-        FamilyActivityPicker(selection: $viewModel.discouragedApps)
+        FamilyActivityPicker(headerText: "Encouraged Apps", selection: $viewModel.encouragedApps)
     }
 }
 
-struct AppBLockListView_Previews: PreviewProvider {
+struct EncouragedAppsView_Previews: PreviewProvider {
     static var previews: some View {
         let sentinel = Sentinel.shared
-        AppBLockListView()
+        EncouragedAppsView()
             .environmentObject(sentinel)
             .environment(\.managedObjectContext, PersistenceController.preview.context)
     }

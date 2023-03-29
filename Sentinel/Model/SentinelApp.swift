@@ -22,11 +22,19 @@ struct SentinelApp: App {
                 .onAppear {
                     Task {
                         do {
-                            try await center.requestAuthorization(for: .child)
+                            try await center.requestAuthorization(for: .individual)
+                            sentinel.initiateMonitoringDiscouragedApps()
+                            sentinel.initiateMonitoringEncouragedApps()
                         } catch {
                             print("Failed to authorized \(error.localizedDescription)")
                         }
-                        sentinel.initiateMonitoring()
+                        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                            if success {
+                                print("All set!")
+                            } else if let error = error {
+                                print(error.localizedDescription)
+                            }
+                        }
                     }
                 }
         }

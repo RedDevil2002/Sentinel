@@ -20,12 +20,20 @@ struct ContentView: View {
                 .tabItem {
                     Image(systemName: "list.bullet")
                 }
-            AppBLockListView()
+            DiscouragedAppsView()
                 .environmentObject(sentinel)
                 .environment(\.managedObjectContext, context)
                 .tabItem {
-                    Image(systemName: "xmark.app")
+                    Image(systemName: "hand.raised.app.fill")
                 }
+            
+            EncouragedAppsView()
+                .environmentObject(sentinel)
+                .environment(\.managedObjectContext, context)
+                .tabItem {
+                    Image(systemName: "app.badge.checkmark.fill")
+                }
+            
             SchedulerView()
                 .environmentObject(sentinel)
                 .environment(\.managedObjectContext, context)
