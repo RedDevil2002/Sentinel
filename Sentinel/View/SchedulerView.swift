@@ -12,8 +12,16 @@ struct SchedulerView: View {
     @EnvironmentObject var sentinel: Sentinel
     @State private var showAddWebsiteView = false
     
-    @State private var start: Date = Date()
-    @State private var end: Date = Date()
+    @State private var start: Date = Date() {
+        didSet {
+            sentinel.start = start
+        }
+    }
+    @State private var end: Date = Date() {
+        didSet {
+            sentinel.end = end
+        }
+    }
     
     var body: some View {
         VStack {

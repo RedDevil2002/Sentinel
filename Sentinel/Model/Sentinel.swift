@@ -71,7 +71,8 @@ class Sentinel: ObservableObject {
             self.encouragedApps = encouragedApps
         }
         
-        stopMonitoring()
+        let center = DeviceActivityCenter()
+        center.stopMonitoring([.encourage])
         initiateMonitoringEncouragedApps()
     }
     
