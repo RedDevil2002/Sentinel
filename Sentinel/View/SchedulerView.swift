@@ -33,11 +33,13 @@ struct SchedulerView: View {
             }
             .padding()
             
+            // MARK: DEBUG
             Button {
                 sentinel.reset()
                 sentinel.stopMonitoring()
             } label: {
-                Text("Unblock")
+                Text("Unblock (DEBUG)")
+                    .foregroundColor(.brown)
             }
             .padding()
         }

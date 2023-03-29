@@ -28,7 +28,7 @@ class DeviceActivityMonitorExtension: DeviceActivityMonitor {
         super.eventDidReachThreshold(event, activity: activity)
         
         // Handle the event reaching its threshold.
-        
+        sentinel.startedEncouragedAppNotification()
     }
     
     override func intervalWillStartWarning(for activity: DeviceActivityName) {
@@ -42,6 +42,7 @@ class DeviceActivityMonitorExtension: DeviceActivityMonitor {
         super.intervalWillEndWarning(for: activity)
         
         // Handle the warning before the interval ends.
+        sentinel.startedEncouragedAppNotification()
     }
     
     override func eventWillReachThresholdWarning(_ event: DeviceActivityEvent.Name, activity: DeviceActivityName) {
@@ -50,21 +51,5 @@ class DeviceActivityMonitorExtension: DeviceActivityMonitor {
         // Handle the warning before the event reaches its threshold.
         
         
-    }
-    
-    private func thresholdNotfication() {
-        let content = UNMutableNotificationContent()
-        content.title = "Feed the cat"
-        content.subtitle = "It looks hungry"
-        content.sound = UNNotificationSound.default
-
-        // show this notification five seconds from now
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-
-        // choose a random identifier
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-
-        // add our notification request
-        UNUserNotificationCenter.current().add(request)
     }
 }
