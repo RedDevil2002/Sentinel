@@ -14,10 +14,21 @@ class Sentinel: ObservableObject {
     static let shared = Sentinel()
     let store = ManagedSettingsStore()
     
+    private var discouragedApps = FamilyActivitySelection(includeEntireCategory: true)
+    
     private init() { }
     
-    @Published var selectionToDiscourage: FamilyActivitySelection = FamilyActivitySelection()
-    @Published var selectionToEncourage: FamilyActivitySelection = FamilyActivitySelection()
+    func setShieldRestrictions(_ discouragedApps: FamilyActivitySelection? = nil) {
+        if let discouragedApps = discouragedApps {
+            self.discouragedApps = discouragedApps
+        }
+        
+        store.shield.applications = self.discouragedApps.applicationTokens
+        store.shield.applicationCategories = self.discouragedApps.categoryTokens.isEmpty ? nil: ShieldSettings.ActivityCategoryPolicy.specific(self.discouragedApps.categoryTokens)
+        store.shield.webDomainCategories = ShieldSettings.ActivityCategoryPolicy.specific(self.discouragedApps.categoryTokens, except: Set())
+        store.shield.webDomains = self.discouragedApps.webDomainTokens
+        
+    }
     
     func initiateMonitoring() {
         let schedule = DeviceActivitySchedule(intervalStart: DateComponents(hour: 0, minute: 0), intervalEnd: DateComponents(hour: 23, minute: 59), repeats: true)
@@ -48,6 +59,10 @@ extension Sentinel {
     
     // Clear store settings
     func reset() {
+        store.shield.applications = Set()
+        store.shield.applicationCategories = ShieldSettings.ActivityCategoryPolicy.none
+        store.shield.webDomainCategories = ShieldSettings.ActivityCategoryPolicy.none
+        store.shield.webDomains = Set()
         store.clearAllSettings()
     }
     
@@ -79,26 +94,7 @@ extension DeviceActivityName {
 //    }
 //}
 //
-//func setShieldRestrictions() {
-//    // SET UP DOMAINS
-//    let domainsToBLocks = Set(selectionToDiscourage.webDomains).union(customDomainsToBlock)
-//    print("model.setShieledRestrictions()\ncustomDomainsToBlock = \(customDomainsToBlock)")
-//    print("model.setShieledRestrictions()\ndomainsToBlock = \(domainsToBLocks)")
 //
-//    print("model.setShieldRestrictions()\nwebDonmains = \(selectionToDiscourage.webDomains)")
-//    print("Comparison between \(selectionToDiscourage.webDomains.first.debugDescription) and \(WebDomain(domain: "twitter.com"))")
-//    print(selectionToDiscourage.webDomains.first == WebDomain(domain: "twitter.com"))
-//
-//    store.shield.applications = selectionToDiscourage.applicationTokens
-//    store.shield.applicationCategories = selectionToDiscourage.categoryTokens.isEmpty ? nil: ShieldSettings.ActivityCategoryPolicy.specific(selectionToDiscourage.categoryTokens)
-//    store.shield.webDomainCategories = ShieldSettings.ActivityCategoryPolicy.specific(selectionToDiscourage.categoryTokens, except: Set())
-//    store.shield.webDomains = selectionToDiscourage.webDomainTokens.union(Set([WebDomain(domain: "twitter.com")].compactMap({ $0.token
-//    })))
-//
-//    store.webContent.blockedByFilter = WebContentSettings.FilterPolicy.auto(domainsToBLocks)
-//
-//    store.dateAndTime.requireAutomaticDateAndTime = true
-//}
 //
 //func initiateMonitoringEncouraged() {
 //    let schedule = DeviceActivitySchedule(intervalStart: DateComponents(hour: 0, minute: 0), intervalEnd: DateComponents(hour: 23, minute: 59), repeats: true)
@@ -142,4 +138,26 @@ extension DeviceActivityName {
 //    store.shield.applications = Set()
 //    store.shield.webDomains = Set()
 //    store.clearAllSettings()
+//}
+
+//func setShieldRestrictions(_ discouragedApps: FamilyActivitySelection) {
+//    // SET UP DOMAINS
+//    discouragedApps
+//    let domainsToBLocks = Set(discouragedApps.webDomains).union(customDomainsToBlock)
+//    print("model.setShieledRestrictions()\ncustomDomainsToBlock = \(customDomainsToBlock)")
+//    print("model.setShieledRestrictions()\ndomainsToBlock = \(domainsToBLocks)")
+//
+//    print("model.setShieldRestrictions()\nwebDonmains = \(selectionToDiscourage.webDomains)")
+//    print("Comparison between \(selectionToDiscourage.webDomains.first.debugDescription) and \(WebDomain(domain: "twitter.com"))")
+//    print(selectionToDiscourage.webDomains.first == WebDomain(domain: "twitter.com"))
+//
+//    store.shield.applications = selectionToDiscourage.applicationTokens
+//    store.shield.applicationCategories = selectionToDiscourage.categoryTokens.isEmpty ? nil: ShieldSettings.ActivityCategoryPolicy.specific(selectionToDiscourage.categoryTokens)
+//    store.shield.webDomainCategories = ShieldSettings.ActivityCategoryPolicy.specific(selectionToDiscourage.categoryTokens, except: Set())
+//    store.shield.webDomains = selectionToDiscourage.webDomainTokens.union(Set([WebDomain(domain: "twitter.com")].compactMap({ $0.token
+//    })))
+//
+//    store.webContent.blockedByFilter = WebContentSettings.FilterPolicy.auto(domainsToBLocks)
+//
+//    store.dateAndTime.requireAutomaticDateAndTime = true
 //}

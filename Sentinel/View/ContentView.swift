@@ -14,11 +14,30 @@ struct ContentView: View {
     
     var body: some View {
         TabView {
-            CustomBlockListView()
+            WebDomainBlockListView()
                 .environmentObject(sentinel)
                 .environment(\.managedObjectContext, context)
                 .tabItem {
                     Image(systemName: "list.bullet")
+                }
+            AppBLockListView()
+                .environmentObject(sentinel)
+                .environment(\.managedObjectContext, context)
+                .tabItem {
+                    Image(systemName: "xmark.app")
+                }
+            SchedulerView()
+                .environmentObject(sentinel)
+                .environment(\.managedObjectContext, context)
+                .tabItem {
+                    Image(systemName: "timer.circle.fill")
+                }
+            
+            AdminView()
+                .environmentObject(sentinel)
+                .environment(\.managedObjectContext, context)
+                .tabItem {
+                    Image(systemName: "key.fill")
                 }
         }
         .tint(.primary)
@@ -31,6 +50,7 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
             .environmentObject(sentinel)
+        
         
     }
 }

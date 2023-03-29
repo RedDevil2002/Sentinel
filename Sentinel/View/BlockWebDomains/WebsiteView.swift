@@ -40,7 +40,6 @@ struct DetailWebsiteView_Previews: PreviewProvider {
 extension WebsiteView {
     
     fileprivate func PreviewSectionView() -> some View {
-        return
         Section {
             if pref.showPreviewOfURL {
                 WebPreview(domain: viewModel.domain)

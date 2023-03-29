@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreData
 
-struct CustomBlockListView: View {
+struct WebDomainBlockListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var sentinel: Sentinel
     @State private var showAddWebsiteView = false
