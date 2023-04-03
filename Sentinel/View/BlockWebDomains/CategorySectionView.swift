@@ -41,7 +41,9 @@ struct CategorySectionView: View {
             }
         } header: {
             Toggle(isOn: binding(for: category.rawValue)) {
-                Text(category.rawValue)
+                Text(category.rawValue.uppercased())
+                    .font(.title2)
+                    .bold()
             }
 //            .toggleStyle(.button)
         }
